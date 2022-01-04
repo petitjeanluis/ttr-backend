@@ -26,8 +26,6 @@ class PickInitialDestinationCardsState(StateHandler):
 
         # validate player belongs to this game
         player: Player = validateAndGetPlayer(payload, gameDetails)
-
-        validateTurn(payload, gameDetails)
         
         # validate player has not picked destination cards yet
         if player.id == payload['id'] and len(player.destinationOptionSet) == 0:

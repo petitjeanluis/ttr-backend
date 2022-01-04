@@ -1,25 +1,20 @@
-import logging
-from logging import StreamHandler
-logging.getLogger().setLevel(logging.INFO)
-logging.getLogger().addHandler(StreamHandler())
-
-from engine import GameEngine, PlayerAction, GameEngineValidationException, GameEngineException
-
-log = logging.getLogger(__name__)
+import json
+from state import StateEngine, StateMachineValidationException
+from state.actions import PlayerAction
 
 def handler(event, context):
 
     connectionId = event['requestContext']['connectionId']
     
-    # body = json.loads(event['body'])
-    body = event['body']
+    body = json.loads(event['body'])
+    # body = event['body']
     
     payload = body['payload']
     action = PlayerAction[body['action']]
     
     try:
-        GameEngine.processAction(action, payload, connectionId)
-    except GameEngineValidationException as error:
+        StateEngine.processAction(action, payload, connectionId)
+    except StateMachineValidationException as error:
         return {
             "statusCode": 400,
             "errorMessage": str(error)
@@ -31,10 +26,6 @@ def handler(event, context):
 
 
 if __name__ == '__main__':
-
-    import pprint
-    pp = pprint.PrettyPrinter(indent=2)
-
     # event = {
     #     "body": {
     #         "action": "CREATE_GAME",
@@ -48,7 +39,7 @@ if __name__ == '__main__':
     #     }
     # }
 
-    # print(pp.pprint(handler(event, None)))
+    # print(handler(event, None))
 
     # event = {
     #     "body": {
@@ -64,7 +55,7 @@ if __name__ == '__main__':
     #     }
     # }
 
-    # print(pp.pprint(handler(event, None)))
+    # print(handler(event, None))
 
     # event = {
     #     "body": {
@@ -79,13 +70,13 @@ if __name__ == '__main__':
     #     }
     # }
 
-    # print(pp.pprint(handler(event, None)))
+    # print(handler(event, None))
 
     # event = {
     #     "body": {
     #         "action": "PICK_DESTINATION_CARDS",
     #         "payload": {
-    #             'destinationCards': [20,21],
+    #             'destinationCardIds': [9,4],
     #             'id': '1111',
     #             'gameId': '0000'
     #         }
@@ -95,20 +86,84 @@ if __name__ == '__main__':
     #     }
     # }
 
-    # print(pp.pprint(handler(event, None)))
+    # print(handler(event, None))
 
-    event = {
-        "body": {
-            "action": "BUILD",
-            "payload": {
-                'destinationCards': [16,17,29],
-                'id': '2222',
-                'gameId': '0000'
-            }
-        },
-        "requestContext": {
-            "connectionId": 'testConnection1'
-        }
-    }
+    # event = {
+    #     "body": {
+    #         "action": "PICK_DESTINATION_CARDS",
+    #         "payload": {
+    #             'destinationCardIds': [2,18],
+    #             'id': '2222',
+    #             'gameId': '0000'
+    #         }
+    #     },
+    #     "requestContext": {
+    #         "connectionId": 'testConnection1'
+    #     }
+    # }
 
-    print(pp.pprint(handler(event, None)))
+    # print(handler(event, None))
+
+    # event = {
+    #     "body": {
+    #         "action": "BUILD",
+    #         "payload": {
+    #             'trainCards': ['WHITE','WILD'],
+    #             'pathId': 95,
+    #             'id': '1111',
+    #             'gameId': '0000'
+    #         }
+    #     },
+    #     "requestContext": {
+    #         "connectionId": 'testConnection1'
+    #     }
+    # }
+
+    # print(handler(event, None))
+
+    # event = {
+    #     "body": {
+    #         "action": "PICK_RANDOM_TRAIN_CARD",
+    #         "payload": {
+    #             'id': '2222',
+    #             'gameId': '0000'
+    #         }
+    #     },
+    #     "requestContext": {
+    #         "connectionId": 'testConnection1'
+    #     }
+    # }
+
+    # print(handler(event, None))
+
+    # event = {
+    #     "body": {
+    #         "action": "GET_DESTINATION_CARDS",
+    #         "payload": {
+    #             'id': '1111',
+    #             'gameId': '0000'
+    #         }
+    #     },
+    #     "requestContext": {
+    #         "connectionId": 'testConnection1'
+    #     }
+    # }
+
+    # print(handler(event, None))
+
+    # event = {
+    #     "body": {
+    #         "action": "PICK_DESTINATION_CARDS",
+    #         "payload": {
+    #             'id': '1111',
+    #             'gameId': '0000',
+    #             "destinationCardIds": [1]
+    #         }
+    #     },
+    #     "requestContext": {
+    #         "connectionId": 'testConnection1'
+    #     }
+    # }
+
+    # print(handler(event, None))
+    pass

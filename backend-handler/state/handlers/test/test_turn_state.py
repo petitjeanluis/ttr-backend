@@ -251,8 +251,17 @@ class TestTurnState(unittest.TestCase):
         payload['id'] = 1
         payload['pathId'] = 0
         payload['trainCards'] = ['GREEN','WILD','WILD']
+
         TurnState.validateInput(PlayerAction.BUILD, payload, gameDetails)
         TurnState.submitInput(PlayerAction.BUILD, payload, gameDetails)
+
+        assert gameDetails.gameState == GameState.TURN
+        assert gameDetails.activePlayerId == 2
+        assert gameDetails.pathOwnership[0] == 1
+        assert gameDetails.players[0].pathScore == 4
+        assert gameDetails.players[0].trainCount == 7
+        assert len(gameDetails.players[0].trainCards) == 0
+        assert len(gameDetails.discardTrainCardPile) == 3
     
     @patch('state.handlers.turn_state.updateGameDetails')
     @patch('state.handlers.turn_state.updatePlayers')
@@ -264,8 +273,17 @@ class TestTurnState(unittest.TestCase):
         payload['id'] = 1
         payload['pathId'] = 0
         payload['trainCards'] = ['WILD','WILD','WILD']
+
         TurnState.validateInput(PlayerAction.BUILD, payload, gameDetails)
         TurnState.submitInput(PlayerAction.BUILD, payload, gameDetails)
+
+        assert gameDetails.gameState == GameState.TURN
+        assert gameDetails.activePlayerId == 2
+        assert gameDetails.pathOwnership[0] == 1
+        assert gameDetails.players[0].pathScore == 4
+        assert gameDetails.players[0].trainCount == 7
+        assert len(gameDetails.players[0].trainCards) == 0
+        assert len(gameDetails.discardTrainCardPile) == 3
     
     @patch('state.handlers.turn_state.updateGameDetails')
     @patch('state.handlers.turn_state.updatePlayers')
@@ -277,21 +295,39 @@ class TestTurnState(unittest.TestCase):
         payload['id'] = 1
         payload['pathId'] = 0
         payload['trainCards'] = ['GREEN','GREEN','GREEN']
+
         TurnState.validateInput(PlayerAction.BUILD, payload, gameDetails)
         TurnState.submitInput(PlayerAction.BUILD, payload, gameDetails)
+
+        assert gameDetails.gameState == GameState.TURN
+        assert gameDetails.activePlayerId == 2
+        assert gameDetails.pathOwnership[0] == 1
+        assert gameDetails.players[0].pathScore == 4
+        assert gameDetails.players[0].trainCount == 7
+        assert len(gameDetails.players[0].trainCards) == 0
+        assert len(gameDetails.discardTrainCardPile) == 3
 
     @patch('state.handlers.turn_state.updateGameDetails')
     @patch('state.handlers.turn_state.updatePlayers')
     def test_successful_build_color_path_with_some_wild(self, updateGameDetails, updatePlayers):
         gameDetails = createGameDetails(GameState.TURN)
         gameDetails.players[0].trainCount = 10
-        gameDetails.players[0].trainCards = ['GREEN','WILD']
+        gameDetails.players[0].trainCards = ['GREEN','WILD','BLUE']
         payload = dict()
         payload['id'] = 1
         payload['pathId'] = 96
         payload['trainCards'] = ['GREEN','WILD']
+
         TurnState.validateInput(PlayerAction.BUILD, payload, gameDetails)
         TurnState.submitInput(PlayerAction.BUILD, payload, gameDetails)
+
+        assert gameDetails.gameState == GameState.TURN
+        assert gameDetails.activePlayerId == 2
+        assert gameDetails.pathOwnership[96] == 1
+        assert gameDetails.players[0].pathScore == 2
+        assert gameDetails.players[0].trainCount == 8
+        assert len(gameDetails.players[0].trainCards) == 1
+        assert len(gameDetails.discardTrainCardPile) == 2
 
     @patch('state.handlers.turn_state.updateGameDetails')
     @patch('state.handlers.turn_state.updatePlayers')
@@ -303,8 +339,17 @@ class TestTurnState(unittest.TestCase):
         payload['id'] = 1
         payload['pathId'] = 96
         payload['trainCards'] = ['WILD','WILD']
+
         TurnState.validateInput(PlayerAction.BUILD, payload, gameDetails)
         TurnState.submitInput(PlayerAction.BUILD, payload, gameDetails)
+
+        assert gameDetails.gameState == GameState.TURN
+        assert gameDetails.activePlayerId == 2
+        assert gameDetails.pathOwnership[96] == 1
+        assert gameDetails.players[0].pathScore == 2
+        assert gameDetails.players[0].trainCount == 8
+        assert len(gameDetails.players[0].trainCards) == 0
+        assert len(gameDetails.discardTrainCardPile) == 2
 
     @patch('state.handlers.turn_state.updateGameDetails')
     @patch('state.handlers.turn_state.updatePlayers')
@@ -322,8 +367,9 @@ class TestTurnState(unittest.TestCase):
 
         assert gameDetails.gameState == GameState.TURN
         assert gameDetails.activePlayerId == 2
-        assert 96 in gameDetails.pathOwnership
         assert gameDetails.pathOwnership[96] == 1
+        assert gameDetails.players[0].pathScore == 2
+        assert gameDetails.players[0].trainCount == 8
         assert len(gameDetails.players[0].trainCards) == 0
         assert len(gameDetails.discardTrainCardPile) == 2
 

@@ -30,10 +30,10 @@ class GameDetails:
 
         self.activePlayerId: int = activePlayerId
 
-    def toDict(self):
+    def toDict(self) -> dict:
         return {
             'gameId': self.gameId,
-            'pathOwnership': self.pathOwnership,
+            'pathOwnership': pathOwnershipToStrDict(self.pathOwnership),
             'players': [player.toDict() for player in self.players],
             'availableCards': [card._name_ for card in self.availableCards],
             'trainCardPile': [card._name_ for card in self.trainCardPile],
@@ -43,11 +43,13 @@ class GameDetails:
             'hostId': self.hostId,
             'activePlayerId': self.activePlayerId,
         }
+
+    
     
     def fromDict(item: dict):
         return GameDetails(
             gameId=item['gameId'],
-            pathOwnership=item['pathOwnership'],
+            pathOwnership=pathOwnershipToIntDict(item['pathOwnership']),
             players=[Player.fromDict(player) for player in item['players']],
             availableCards=[TrainColor[card] for card in item['availableCards']],
             trainCardPile=[TrainColor[card] for card in item['trainCardPile']],
@@ -57,4 +59,17 @@ class GameDetails:
             hostId=item['hostId'],
             activePlayerId=item['activePlayerId']
         )
+
+def pathOwnershipToStrDict(intDict: dict) -> dict:
+    print(intDict)
+    stringDict = dict()
+    for key, value in intDict.items():
+        stringDict[str(key)] = value
+    return stringDict
+
+def pathOwnershipToIntDict(stringDict: dict) -> dict:
+    intDict = dict()
+    for key, value in stringDict.items():
+        intDict[int(key)] = value
+    return intDict
     

@@ -37,21 +37,6 @@ class TestPickInitialDestinationCards(unittest.TestCase):
             self.assertTrue(isinstance(e, StateMachineValidationException))
         self.assertFalse(error == None)
 
-    def test_not_turn(self):
-        gameDetails = createGameDetails(GameState.PICK_INITIAL_DESTINATION_CARDS)
-        payload = dict()
-        payload['id'] = 2
-        payload['destinationCardIds'] = []
-
-        error: StateMachineValidationException = None
-        try:
-            PickInitialDestinationCardsState.validateInput(PlayerAction.PICK_DESTINATION_CARDS, payload, gameDetails)
-        except Exception as e:
-            error = e
-            self.assertRegex(str(e), r'It is not your turn!')
-            self.assertTrue(isinstance(e, StateMachineValidationException))
-        self.assertFalse(error == None)
-
     def test_no_destination_card_list_passed(self):
         gameDetails = createGameDetails()
         gameDetails.players[0].destinationOptionSet = [0, 1, 2]

@@ -5,7 +5,7 @@ from ..actions import PlayerAction
 from ..utils import validateAndGetPlayer, validateTurn, getPlayer, getNextPlayerId, makeCountDict
 from services import updateGameDetails, updatePlayers
 
-from constants import PATH_MAP, Path, TrainColor, GameState
+from constants import PATH_MAP, Path, TrainColor, GameState, PATH_VALUE
 from models import GameDetails, Player, Destination
 
 class TurnState(StateHandler):
@@ -101,6 +101,7 @@ class TurnState(StateHandler):
         player: Player = getPlayer(payload, gameDetails)
 
         player.trainCount = player.trainCount - path.length
+        player.pathScore = player.pathScore + PATH_VALUE[path.length]
 
         for card in selectedCards:
             player.trainCards.remove(card)
