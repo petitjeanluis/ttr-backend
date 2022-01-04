@@ -1,0 +1,33 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  ttr-backend
+
+Globals:
+  Function:
+    Timeout: 30
+
+Resources:
+  BackendHandler:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend-handler/
+      Handler: app.handler
+      Runtime: python3.9
+      Role: arn:aws:iam::406904802865:role/AWSLambda-FullAcessDynamoDB
+      Architectures:
+        - x86_64
+      Environment:
+        Variables:
+          API_ID: mn5svh6mdc
+          STAGE: dev
+          REGION: !Ref AWS::Region
+          TABLE_NAME: ttr-GameDetails
+  
+  GameDetailsTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      PrimaryKey: 
+        Name: gameId
+        Type: String
+      TableName: ttr-GameDetails
