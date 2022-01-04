@@ -15,7 +15,7 @@ class GameDetails:
             trainCardPile: list[TrainColor] = None,
             destinationCardPile: list[int] = None,
             discardTrainCardPile: list[TrainColor] = None,
-            activePlayerId: int = None):
+            activePlayerId: int = -1):
         self.gameId: int = gameId
         self.players: list[Player] =  players
         self.gameState: GameState = gameState

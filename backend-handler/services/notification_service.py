@@ -15,7 +15,7 @@ def updatePlayers(gameDetails: GameDetails):
     stateUpdates: dict[str, StateUpdate] =  buildStateUpdates(gameDetails)
 
     for connectionId in stateUpdates:
-        # print(f'Notification: {stateUpdates[connectionId].toDict()}\n')
-        client.post_to_connection(Data=stateUpdates[connectionId].toDict(), ConnectionId=connectionId)
+        client.post_to_connection(Data=stateUpdates[connectionId].toJsonStr(), ConnectionId=connectionId)
+        pass
 
     

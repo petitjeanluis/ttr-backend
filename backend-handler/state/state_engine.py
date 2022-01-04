@@ -39,8 +39,8 @@ class StateEngine:
             connectionId=connectionId
         )
 
-        # gameId = '0000'
-        gameId = str(randint(111111,999999))
+        # gameId = 0
+        gameId = randint(111111,999999)
         gameDetails = GameDetails(
             gameId=gameId,
             players=[hostPlayer],

@@ -30,7 +30,7 @@ if __name__ == '__main__':
     #     "body": {
     #         "action": "CREATE_GAME",
     #         "payload": {
-    #             'id': '1111',
+    #             'id': 1111,
     #             'name': 'Luis'
     #         }
     #     },
@@ -41,28 +41,28 @@ if __name__ == '__main__':
 
     # print(handler(event, None))
 
-    # event = {
-    #     "body": {
-    #         "action": "JOIN_GAME",
-    #         "payload": {
-    #             'id': '2222',
-    #             'name': 'Squirrel',
-    #             'gameId': '0000'
-    #         }
-    #     },
-    #     "requestContext": {
-    #         "connectionId": 'testConnection2'
-    #     }
-    # }
+    event = {
+        "body": {
+            "action": "JOIN_GAME",
+            "payload": {
+                'id': 2222,
+                'name': 'Squirrel',
+                'gameId': 0
+            }
+        },
+        "requestContext": {
+            "connectionId": 'testConnection2'
+        }
+    }
 
-    # print(handler(event, None))
+    print(handler(event, None))
 
     # event = {
     #     "body": {
     #         "action": "START_GAME",
     #         "payload": {
-    #             'id': '1111',
-    #             'gameId': '0000'
+    #             'id': 1111,
+    #             'gameId': 0
     #         }
     #     },
     #     "requestContext": {
@@ -77,8 +77,8 @@ if __name__ == '__main__':
     #         "action": "PICK_DESTINATION_CARDS",
     #         "payload": {
     #             'destinationCardIds': [9,4],
-    #             'id': '1111',
-    #             'gameId': '0000'
+    #             'id': 1111,
+    #             'gameId': 0000
     #         }
     #     },
     #     "requestContext": {
@@ -93,8 +93,8 @@ if __name__ == '__main__':
     #         "action": "PICK_DESTINATION_CARDS",
     #         "payload": {
     #             'destinationCardIds': [2,18],
-    #             'id': '2222',
-    #             'gameId': '0000'
+    #             'id': 2222,
+    #             'gameId': 0000
     #         }
     #     },
     #     "requestContext": {
@@ -110,8 +110,8 @@ if __name__ == '__main__':
     #         "payload": {
     #             'trainCards': ['WHITE','WILD'],
     #             'pathId': 95,
-    #             'id': '1111',
-    #             'gameId': '0000'
+    #             'id': 1111,
+    #             'gameId': 0000
     #         }
     #     },
     #     "requestContext": {
@@ -125,8 +125,8 @@ if __name__ == '__main__':
     #     "body": {
     #         "action": "PICK_RANDOM_TRAIN_CARD",
     #         "payload": {
-    #             'id': '2222',
-    #             'gameId': '0000'
+    #             'id': 2222,
+    #             'gameId': 0000
     #         }
     #     },
     #     "requestContext": {
@@ -140,8 +140,8 @@ if __name__ == '__main__':
     #     "body": {
     #         "action": "GET_DESTINATION_CARDS",
     #         "payload": {
-    #             'id': '1111',
-    #             'gameId': '0000'
+    #             'id': 1111,
+    #             'gameId': 0000
     #         }
     #     },
     #     "requestContext": {
@@ -155,8 +155,8 @@ if __name__ == '__main__':
     #     "body": {
     #         "action": "PICK_DESTINATION_CARDS",
     #         "payload": {
-    #             'id': '1111',
-    #             'gameId': '0000',
+    #             'id': 1111,
+    #             'gameId': 0000,
     #             "destinationCardIds": [1]
     #         }
     #     },

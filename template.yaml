@@ -29,5 +29,5 @@ Resources:
     Properties:
       PrimaryKey: 
         Name: gameId
-        Type: String
+        Type: Number
       TableName: ttr-GameDetails

@@ -3,6 +3,9 @@ from .opponent import Opponent
 from .player import Player
 
 from constants import TrainColor, GameState
+import decimal
+
+import json
 
 class StateUpdate:
 
@@ -12,24 +15,32 @@ class StateUpdate:
             availableCards: list[TrainColor],
             player: Player,
             activePlayerId: str,
-            gameState: GameState) -> None:
+            gameState: GameState,
+            gameId: int) -> None:
         self.pathOwnership: dict = pathOwnership
         self.opponents: list[Opponent] = opponents
         self.availableCards: list[TrainColor] = availableCards
         self.player: Player = player
         self.activePlayerId: str = activePlayerId
         self.gameState: GameState = gameState
+        self.gameId: int = gameId
     
-    def toDict(self) -> dict:
-        return {
-            'pathOwnership': self.pathOwnership,
+    def toJsonStr(self) -> dict:
+        jsonObject = {
+            'pathOwnership': [self.pathOwnership],
             'opponents': [opponent.toDict() for opponent in self.opponents],
             'availableCards': [card._name_ for card in self.availableCards],
             'player': self.player.toDict(),
             'activePlayerId': self.activePlayerId,
-            'gameState': self.gameState._name_
+            'gameState': self.gameState._name_,
+            'gameId': self.gameId
         }
+        return json.dumps(jsonObject, default=handle_decimal_type)
 
+def handle_decimal_type(obj):
+    if isinstance(obj, decimal.Decimal):
+        return int(obj)
+    raise TypeError
 
 def buildStateUpdates(gameDetails: GameDetails) -> dict[str, StateUpdate]:
     stateUpdates: dict[str, StateUpdate] = {}
@@ -54,7 +65,8 @@ def buildStateUpdates(gameDetails: GameDetails) -> dict[str, StateUpdate]:
             availableCards=gameDetails.availableCards,
             player=player,
             activePlayerId=gameDetails.activePlayerId,
-            gameState=gameDetails.gameState
+            gameState=gameDetails.gameState,
+            gameId=gameDetails.gameId
         )
         stateUpdates[player.connectionId] = stateUpdate
 
