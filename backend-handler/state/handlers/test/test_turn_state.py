@@ -1,5 +1,4 @@
 import unittest
-from unittest.mock import patch
 
 from test_utils import createGameDetails
 from state.actions import PlayerAction
@@ -240,10 +239,7 @@ class TestTurnState(unittest.TestCase):
         self.assertFalse(error == None)
 
     # SUCCCESSFUL BUILDS
-
-    @patch('state.handlers.turn_state.updateGameDetails')
-    @patch('state.handlers.turn_state.updatePlayers')
-    def test_successful_build_wild_path_with_some_wild(self, updateGameDetails, updatePlayers):
+    def test_successful_build_wild_path_with_some_wild(self):
         gameDetails = createGameDetails(GameState.TURN)
         gameDetails.players[0].trainCount = 10
         gameDetails.players[0].trainCards = ['GREEN','WILD','WILD']
@@ -263,9 +259,7 @@ class TestTurnState(unittest.TestCase):
         assert len(gameDetails.players[0].trainCards) == 0
         assert len(gameDetails.discardTrainCardPile) == 3
     
-    @patch('state.handlers.turn_state.updateGameDetails')
-    @patch('state.handlers.turn_state.updatePlayers')
-    def test_successful_build_wild_path_with_all_wild(self, updateGameDetails, updatePlayers):
+    def test_successful_build_wild_path_with_all_wild(self):
         gameDetails = createGameDetails(GameState.TURN)
         gameDetails.players[0].trainCount = 10
         gameDetails.players[0].trainCards = ['WILD','WILD','WILD']
@@ -285,9 +279,7 @@ class TestTurnState(unittest.TestCase):
         assert len(gameDetails.players[0].trainCards) == 0
         assert len(gameDetails.discardTrainCardPile) == 3
     
-    @patch('state.handlers.turn_state.updateGameDetails')
-    @patch('state.handlers.turn_state.updatePlayers')
-    def test_successful_build_wild_path_with_no_wild(self, updateGameDetails, updatePlayers):
+    def test_successful_build_wild_path_with_no_wild(self):
         gameDetails = createGameDetails(GameState.TURN)
         gameDetails.players[0].trainCount = 10
         gameDetails.players[0].trainCards = ['GREEN','GREEN','GREEN']
@@ -307,9 +299,7 @@ class TestTurnState(unittest.TestCase):
         assert len(gameDetails.players[0].trainCards) == 0
         assert len(gameDetails.discardTrainCardPile) == 3
 
-    @patch('state.handlers.turn_state.updateGameDetails')
-    @patch('state.handlers.turn_state.updatePlayers')
-    def test_successful_build_color_path_with_some_wild(self, updateGameDetails, updatePlayers):
+    def test_successful_build_color_path_with_some_wild(self):
         gameDetails = createGameDetails(GameState.TURN)
         gameDetails.players[0].trainCount = 10
         gameDetails.players[0].trainCards = ['GREEN','WILD','BLUE']
@@ -329,9 +319,7 @@ class TestTurnState(unittest.TestCase):
         assert len(gameDetails.players[0].trainCards) == 1
         assert len(gameDetails.discardTrainCardPile) == 2
 
-    @patch('state.handlers.turn_state.updateGameDetails')
-    @patch('state.handlers.turn_state.updatePlayers')
-    def test_successful_build_color_path_with_all_wild(self, updateGameDetails, updatePlayers):
+    def test_successful_build_color_path_with_all_wild(self):
         gameDetails = createGameDetails(GameState.TURN)
         gameDetails.players[0].trainCount = 10
         gameDetails.players[0].trainCards = ['WILD','WILD']
@@ -351,9 +339,7 @@ class TestTurnState(unittest.TestCase):
         assert len(gameDetails.players[0].trainCards) == 0
         assert len(gameDetails.discardTrainCardPile) == 2
 
-    @patch('state.handlers.turn_state.updateGameDetails')
-    @patch('state.handlers.turn_state.updatePlayers')
-    def test_successful_build_color_path_no_wildcards(self, updateGameDetails, updatePlayers):
+    def test_successful_build_color_path_no_wildcards(self):
         gameDetails = createGameDetails(GameState.TURN)
         gameDetails.players[0].trainCount = 10
         gameDetails.players[0].trainCards = ['GREEN','GREEN']
@@ -373,9 +359,7 @@ class TestTurnState(unittest.TestCase):
         assert len(gameDetails.players[0].trainCards) == 0
         assert len(gameDetails.discardTrainCardPile) == 2
 
-    @patch('state.handlers.turn_state.updateGameDetails')
-    @patch('state.handlers.turn_state.updatePlayers')
-    def test_successful_pick_train_card(self, updateGameDetails, updatePlayers):
+    def test_successful_pick_train_card(self):
         gameDetails = createGameDetails(GameState.TURN)
         gameDetails.availableCards = [TrainColor.GREEN for i in range(5)]
         payload = dict()
@@ -392,10 +376,7 @@ class TestTurnState(unittest.TestCase):
         assert gameDetails.gameState == GameState.PICK_SECOND_TRAIN_CARD
         assert gameDetails.activePlayerId == 1
         
-    
-    @patch('state.handlers.turn_state.updateGameDetails')
-    @patch('state.handlers.turn_state.updatePlayers')
-    def test_successful_pick_wild_train_card(self, updateGameDetails, updatePlayers):
+    def test_successful_pick_wild_train_card(self):
         gameDetails = createGameDetails(GameState.TURN)
         gameDetails.availableCards = [TrainColor.GREEN for i in range(5)]
         gameDetails.availableCards[4] = TrainColor.WILD
@@ -413,9 +394,7 @@ class TestTurnState(unittest.TestCase):
         assert len(gameDetails.players[0].trainCards) == 1
         assert gameDetails.activePlayerId == 2
 
-    @patch('state.handlers.turn_state.updateGameDetails')
-    @patch('state.handlers.turn_state.updatePlayers')
-    def test_successful_pick_random_train_card(self, updateGameDetails, updatePlayers):
+    def test_successful_pick_random_train_card(self):
         gameDetails = createGameDetails(GameState.TURN)
         payload = dict()
         payload['id'] = 1
@@ -429,9 +408,7 @@ class TestTurnState(unittest.TestCase):
         assert len(gameDetails.players[0].trainCards) == 1
         assert gameDetails.activePlayerId == 1
 
-    @patch('state.handlers.turn_state.updateGameDetails')
-    @patch('state.handlers.turn_state.updatePlayers')
-    def test_successful_get_destination_cards(self, updateGameDetails, updatePlayers):
+    def test_successful_get_destination_cards(self):
         gameDetails = createGameDetails(GameState.TURN)
         gameDetails.destinationCardPile = [0,0,0]
         payload = dict()

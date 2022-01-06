@@ -1,5 +1,4 @@
 from .player import Player
-from .destination import Destination
 
 from constants import TrainColor, GameState
 
@@ -61,7 +60,6 @@ class GameDetails:
         )
 
 def pathOwnershipToStrDict(intDict: dict) -> dict:
-    print(intDict)
     stringDict = dict()
     for key, value in intDict.items():
         stringDict[str(key)] = value

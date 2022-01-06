@@ -22,7 +22,9 @@ Resources:
           API_ID: mn5svh6mdc
           STAGE: dev
           REGION: !Ref AWS::Region
-          TABLE_NAME: ttr-GameDetails
+          GAME_DETAILS_TABLE: !Ref GameDetailsTable
+          CONNECTION_TABLE: !Ref ConnectionTable
+
   
   GameDetailsTable:
     Type: AWS::Serverless::SimpleTable
@@ -30,4 +32,10 @@ Resources:
       PrimaryKey: 
         Name: gameId
         Type: Number
-      TableName: ttr-GameDetails
+
+  ConnectionTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      PrimaryKey: 
+        Name: connectionId
+        Type: String

@@ -48,6 +48,8 @@ def buildStateUpdates(gameDetails: GameDetails) -> dict[str, StateUpdate]:
     opponents: dict[str, list[Opponent]] = {}
 
     for player in gameDetails.players:
+        if player.connectionId == None:
+            continue
         tempOpponents = []
         for player2 in gameDetails.players:
             if player2.id == player.id:
@@ -56,9 +58,9 @@ def buildStateUpdates(gameDetails: GameDetails) -> dict[str, StateUpdate]:
                 tempOpponents.append(Opponent(player2))
         opponents[player.id] = tempOpponents
 
-    
-
     for player in gameDetails.players:
+        if player.connectionId == None:
+            continue
         stateUpdate = StateUpdate(
             pathOwnership=gameDetails.pathOwnership,
             opponents=opponents[player.id],

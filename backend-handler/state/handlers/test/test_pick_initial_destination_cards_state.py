@@ -1,5 +1,4 @@
 import unittest
-from unittest.mock import patch
 
 from state.handlers import PickInitialDestinationCardsState
 from state.actions import PlayerAction
@@ -133,9 +132,7 @@ class TestPickInitialDestinationCards(unittest.TestCase):
             self.assertTrue(isinstance(e, StateMachineValidationException))
         self.assertFalse(error == None)
 
-    @patch('state.handlers.pick_initial_destination_cards_state.updateGameDetails')
-    @patch('state.handlers.pick_initial_destination_cards_state.updatePlayers')
-    def test_successful_initial_pick(self, updateGameDetails, updatePlayers):
+    def test_successful_initial_pick(self):
         gameDetails = createGameDetails(GameState.PICK_INITIAL_DESTINATION_CARDS)
         gameDetails.players[0].destinationOptionSet = [0,1,2]
         gameDetails.players[1].destinationOptionSet = [3,4,5]
@@ -152,9 +149,7 @@ class TestPickInitialDestinationCards(unittest.TestCase):
         assert len(gameDetails.players[0].destinationCards) == 2
         assert len(gameDetails.destinationCardPile) == destinationCardPileCount + 1
 
-    @patch('state.handlers.pick_initial_destination_cards_state.updateGameDetails')
-    @patch('state.handlers.pick_initial_destination_cards_state.updatePlayers')
-    def test_successful_initial_pick_and_transition(self, updateGameDetails, updatePlayers):
+    def test_successful_initial_pick_and_transition(self):
         gameDetails = createGameDetails(GameState.PICK_INITIAL_DESTINATION_CARDS)
         gameDetails.players[0].destinationOptionSet = [0,1,2]
         payload = dict()

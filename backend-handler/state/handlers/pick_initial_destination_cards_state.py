@@ -2,10 +2,9 @@ from ..state_handler import StateHandler
 from ..state_exceptions import StateMachineValidationException
 from ..actions import PlayerAction
 
-from ..utils import validateAndGetPlayer, getPlayer, validateTurn
+from ..utils import validateAndGetPlayer, getPlayer
 from constants import GameState
 from models import GameDetails, Player
-from services import updateGameDetails, updatePlayers
 
 class PickInitialDestinationCardsState(StateHandler):
 
@@ -85,6 +84,3 @@ class PickInitialDestinationCardsState(StateHandler):
         
         if selections == len(gameDetails.players):
             gameDetails.gameState = GameState.TURN
-
-        updateGameDetails(gameDetails)
-        updatePlayers(gameDetails)

@@ -1,24 +1,33 @@
 import json
 from state import StateEngine, StateMachineValidationException
 from state.actions import PlayerAction
+from services import removeConnection
+
+import logging
+
+log = logging.getLogger(__name__)
 
 def handler(event, context):
 
     connectionId = event['requestContext']['connectionId']
-    
-    body = json.loads(event['body'])
-    # body = event['body']
-    
-    payload = body['payload']
-    action = PlayerAction[body['action']]
-    
-    try:
-        StateEngine.processAction(action, payload, connectionId)
-    except StateMachineValidationException as error:
-        return {
-            "statusCode": 400,
-            "errorMessage": str(error)
-        }
+    routeKey = event['requestContext']['routeKey']
+
+    if routeKey == '$disconnect':
+        removeConnection(connectionId)
+    else:
+        body = json.loads(event['body'])
+        
+        payload = body['payload']
+        action = PlayerAction[body['action']]
+        
+        try:
+            StateEngine.processAction(action, payload, connectionId)
+        except StateMachineValidationException as error:
+            log.error(error)
+            return {
+                "statusCode": 400,
+                "errorMessage": str(error)
+            }
 
     return {
         "statusCode": 200
@@ -26,6 +35,15 @@ def handler(event, context):
 
 
 if __name__ == '__main__':
+    event = {
+        "requestContext": {
+            "connectionId": 'testConnection1',
+            "routeKey": "$disconnect"
+        }
+    }
+
+    print(handler(event, None))
+
     # event = {
     #     "body": {
     #         "action": "CREATE_GAME",
@@ -35,27 +53,28 @@ if __name__ == '__main__':
     #         }
     #     },
     #     "requestContext": {
-    #         "connectionId": 'testConnection1'
+    #         "connectionId": 'testConnection1',
+    #         "routeKey": "$default"
     #     }
     # }
 
     # print(handler(event, None))
 
-    event = {
-        "body": {
-            "action": "JOIN_GAME",
-            "payload": {
-                'id': 2222,
-                'name': 'Squirrel',
-                'gameId': 0
-            }
-        },
-        "requestContext": {
-            "connectionId": 'testConnection2'
-        }
-    }
+    # event = {
+    #     "body": {
+    #         "action": "JOIN_GAME",
+    #         "payload": {
+    #             'id': 2222,
+    #             'name': 'Squirrel',
+    #             'gameId': 0
+    #         }
+    #     },
+    #     "requestContext": {
+    #         "connectionId": 'testConnection2',
+    #     }
+    # }
 
-    print(handler(event, None))
+    # print(handler(event, None))
 
     # event = {
     #     "body": {

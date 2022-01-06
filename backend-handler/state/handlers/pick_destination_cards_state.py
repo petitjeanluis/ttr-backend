@@ -3,7 +3,6 @@ from ..state_exceptions import StateMachineValidationException
 from ..actions import PlayerAction
 
 from ..utils import getNextPlayerId, validateAndGetPlayer, getPlayer, validateTurn
-from services import updateGameDetails, updatePlayers
 from constants import GameState
 from models import GameDetails, Player
 
@@ -70,6 +69,3 @@ class PickDestinationCardsState(StateHandler):
 
         gameDetails.gameState = GameState.TURN
         gameDetails.activePlayerId = getNextPlayerId(gameDetails)
-
-        updateGameDetails(gameDetails)
-        updatePlayers(gameDetails)

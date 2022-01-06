@@ -1,5 +1,4 @@
 import unittest
-from unittest.mock import patch
 
 from state.handlers import PickSecondTrainCardState
 from state import StateMachineValidationException
@@ -81,9 +80,7 @@ class TestPickSecondTrainState(unittest.TestCase):
             self.assertTrue(isinstance(e, StateMachineValidationException))
         self.assertFalse(error == None)
 
-    @patch('state.handlers.pick_second_train_card_state.updateGameDetails')
-    @patch('state.handlers.pick_second_train_card_state.updatePlayers')
-    def test_successful_pick_color_train_card(self, updateGameDetails, updatePlayers):
+    def test_successful_pick_color_train_card(self):
         gameDetails = createGameDetails(GameState.PICK_SECOND_TRAIN_CARD)
         gameDetails.availableCards = [TrainColor.GREEN for i in range(5)]
         payload = dict()
@@ -99,9 +96,7 @@ class TestPickSecondTrainState(unittest.TestCase):
         assert len(gameDetails.players[0].trainCards) == 1
         assert gameDetails.activePlayerId == 2
 
-    @patch('state.handlers.pick_second_train_card_state.updateGameDetails')
-    @patch('state.handlers.pick_second_train_card_state.updatePlayers')
-    def test_successful_pick_random_train_card(self, updateGameDetails, updatePlayers):
+    def test_successful_pick_random_train_card(self):
         gameDetails = createGameDetails(GameState.PICK_SECOND_TRAIN_CARD)
         payload = dict()
         payload['id'] = 1

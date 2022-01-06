@@ -1,5 +1,4 @@
 import unittest
-from unittest.mock import patch
 
 from state import StateMachineValidationException
 from state.handlers import PickDestinationCardsState
@@ -116,9 +115,7 @@ class TestPickDestinationCardsState(unittest.TestCase):
             self.assertTrue(isinstance(e, StateMachineValidationException))
         self.assertFalse(error == None)
 
-    @patch('state.handlers.pick_destination_cards_state.updateGameDetails')
-    @patch('state.handlers.pick_destination_cards_state.updatePlayers')
-    def test_successful_destination_cards_picked(self, updateGameDetails, updatePlayers):
+    def test_successful_destination_cards_picked(self):
         gameDetails = createGameDetails(GameState.PICK_DESTINATION_CARDS)
         gameDetails.destinationCardPile = [3,4,5,6]
         gameDetails.players[0].destinationOptionSet = [0,1,2]

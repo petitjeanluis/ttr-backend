@@ -1,16 +1,19 @@
 import os
 import boto3
 
-from models import GameDetails
+from models import GameDetails, Player
 
 REGION = os.environ['REGION']
-TABLE_NAME = os.environ['TABLE_NAME']
+GAME_DETAILS_TABLE = os.environ['GAME_DETAILS_TABLE']
+CONNECTION_TABLE = os.environ['CONNECTION_TABLE']
 
 dynamodb = boto3.resource('dynamodb', region_name=REGION)
-table = dynamodb.Table(TABLE_NAME)
+
+game_details_table = dynamodb.Table(GAME_DETAILS_TABLE)
+connection_table = dynamodb.Table(CONNECTION_TABLE)
 
 def getGameDetails(gameId: int) -> GameDetails:
-    result = table.get_item(
+    result = game_details_table.get_item(
         Key={'gameId': gameId},
         ReturnConsumedCapacity='NONE')
     
@@ -20,6 +23,34 @@ def getGameDetails(gameId: int) -> GameDetails:
     return GameDetails.fromDict(result['Item'])
 
 def updateGameDetails(gameDetails: GameDetails):
-    table.put_item(
+    game_details_table.put_item(
         Item=gameDetails.toDict()
     )
+
+def addConnection(connectionId: str, playerId: int, gameId: int):
+    connection_table.put_item(
+        Item={
+            "connectionId": connectionId,
+            "playerId": playerId,
+            "gameId": gameId
+        }
+    )
+
+def removeConnection(connectionId: str):
+    result = connection_table.delete_item(
+        Key={
+            'connectionId': connectionId
+        },
+        ReturnValues='ALL_OLD'
+    )
+
+    gameDetails: GameDetails = getGameDetails(result['Attributes']['gameId'])
+
+    if gameDetails != None:
+        for player in gameDetails.players:
+            if player.id == result['Attributes']['playerId']:
+                player.connectionId = None
+                updateGameDetails(gameDetails)
+                break
+    
+    

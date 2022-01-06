@@ -3,10 +3,9 @@ from ..state_exceptions import StateMachineValidationException
 from ..actions import PlayerAction
 
 from ..utils import validateAndGetPlayer, validateTurn, getPlayer, getNextPlayerId, makeCountDict
-from services import updateGameDetails, updatePlayers
 
 from constants import PATH_MAP, Path, TrainColor, GameState, PATH_VALUE
-from models import GameDetails, Player, Destination
+from models import GameDetails, Player
 
 class TurnState(StateHandler):
 
@@ -90,9 +89,6 @@ class TurnState(StateHandler):
             cls.submitPickTrainCardInput(payload, gameDetails)
         elif action == PlayerAction.PICK_RANDOM_TRAIN_CARD:
             cls.submitPickRandomTrainCardInput(payload, gameDetails)
-
-        updateGameDetails(gameDetails)
-        updatePlayers(gameDetails)
 
     @classmethod
     def submitBuildInput(cls, payload: dict, gameDetails: GameDetails):

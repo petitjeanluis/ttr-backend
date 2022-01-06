@@ -46,10 +46,6 @@ def makeCountDict(array: list[any]) -> dict[any, int]:
             countDict[item] = 1
     return countDict
 
-def getMaxCountKey(array: dict[any]) -> any:
-    for key in array:
-        print(key)
-
 def getAllPlayerColors() -> list[PlayerColor]:
     colors: list[PlayerColor] = []
     for color in PlayerColor:

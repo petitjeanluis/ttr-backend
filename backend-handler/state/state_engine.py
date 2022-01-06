@@ -2,7 +2,7 @@ from .state_handler import StateHandler
 from .actions import PlayerAction
 from .handlers import MatchMakingState, TurnState, PickInitialDestinationCardsState, PickSecondTrainCardState, PickDestinationCardsState, EndState
 
-from services import getGameDetails, updateGameDetails, updatePlayers
+from services import getGameDetails, updateGameDetails, updatePlayers, addConnection, updatePlayer
 
 from models import GameDetails, Player
 from constants import GameState
@@ -27,7 +27,7 @@ class StateEngine:
         elif action == PlayerAction.JOIN_GAME:
             cls.joinGame(payload, connectionId)
         else:
-            cls.updateGame(action, payload, connectionId)
+            cls.updateGame(action, payload)
 
     @classmethod
     def createGame(cls, payload: dict, connectionId: str):
@@ -48,6 +48,7 @@ class StateEngine:
             hostId=hostPlayer.id,
         )
 
+        addConnection(connectionId, hostPlayer.id, gameId)
         updateGameDetails(gameDetails)
         updatePlayers(gameDetails)
 
@@ -60,29 +61,38 @@ class StateEngine:
         if not gameDetails:
             raise GameEngineValidationException(f"Game: {payload['gameId']} not found")
 
-        if gameDetails.gameState != GameState.MATCH_MAKING:
-            raise GameEngineValidationException(f"Game {gameDetails.gameId} already started, can't join game.")
+        player: Player = getPlayer(payload['id'], gameDetails)
 
-        for player in gameDetails.players:
-            if player.id == payload['id']:
-                raise GameEngineValidationException(f"Player id {player.id} already exist in game {payload['gameId']}")
+        # new player
+        if player == None:
+            if gameDetails.gameState != GameState.MATCH_MAKING:
+                raise GameEngineValidationException(f"Game {gameDetails.gameId} already started, can't join game.")
 
-        if len(gameDetails.players) >= 4:
-            raise GameEngineValidationException(f"Game roster is full for game {payload['gameId']}")
+            if len(gameDetails.players) >= 4:
+                raise GameEngineValidationException(f"Game roster is full for game {payload['gameId']}")
 
-        player = Player(
-            id=payload['id'],
-            name=payload['name'],
-            connectionId=connectionId
-        )
+            player = Player(
+                id=payload['id'],
+                name=payload['name'],
+                connectionId=connectionId
+            )
 
-        gameDetails.players.append(player)
+            gameDetails.players.append(player)
 
-        updateGameDetails(gameDetails)
-        updatePlayers(gameDetails)
+            addConnection(connectionId, player.id, gameDetails.gameId)
+            updateGameDetails(gameDetails)
+            updatePlayers(gameDetails)
+
+        # player is re-connecting
+        else:
+            player.connectionId = connectionId
+            addConnection(connectionId, player.id, gameDetails.gameId)
+            updateGameDetails(gameDetails)
+            updatePlayer(player.id, gameDetails)
+
 
     @classmethod
-    def updateGame(cls, action: PlayerAction, payload: dict, connectionId: str):
+    def updateGame(cls, action: PlayerAction, payload: dict):
         validatePayload(payload, 'id', 'gameId')
 
         gameDetails = getGameDetails(payload['gameId'])
@@ -93,6 +103,14 @@ class StateEngine:
 
         stateHandler.submitInput(action, payload, gameDetails)
 
+        updateGameDetails(gameDetails)
+        updatePlayers(gameDetails)
+
+def getPlayer(playerId: int, gameDetails: GameDetails) -> Player:
+    for player in gameDetails.players:
+        if player.id == playerId:
+            return player
+    return None
 
 def validatePayload(payload: dict, *fields: str):
     for field in fields:

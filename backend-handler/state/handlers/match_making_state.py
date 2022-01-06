@@ -1,12 +1,11 @@
 from ..state_handler import StateHandler
 from ..state_exceptions import StateMachineValidationException
 from ..actions import PlayerAction
-from ..utils import getAllPlayerColors, getAllTrainCards, getAllDestinationCards, validateAndGetPlayer, validateTurn
+from ..utils import getAllPlayerColors, getAllTrainCards, getAllDestinationCards, validateAndGetPlayer
 
 from models import GameDetails, Player
-from constants import TrainColor, PlayerColor, TRAIN_CARDS, DESTINATION_CARDS, GameState
+from constants import TrainColor, PlayerColor, GameState
 from random import randint
-from services import updateGameDetails, updatePlayers
 
 class MatchMakingState(StateHandler):
 
@@ -69,6 +68,3 @@ class MatchMakingState(StateHandler):
         gameDetails.activePlayerId = gameDetails.players[randomIndex].id
 
         gameDetails.gameState = GameState.PICK_INITIAL_DESTINATION_CARDS
-
-        updateGameDetails(gameDetails)
-        updatePlayers(gameDetails)

@@ -16,6 +16,13 @@ def updatePlayers(gameDetails: GameDetails):
 
     for connectionId in stateUpdates:
         client.post_to_connection(Data=stateUpdates[connectionId].toJsonStr(), ConnectionId=connectionId)
-        pass
+
+def updatePlayer(playerId: int, gameDetails: GameDetails):
+    stateUpdates: dict[str, StateUpdate] =  buildStateUpdates(gameDetails)
+
+    for connectionId in stateUpdates:
+        if stateUpdates[connectionId].player.id == playerId:
+            client.post_to_connection(Data=stateUpdates[connectionId].toJsonStr(), ConnectionId=connectionId)
+            break
 
     

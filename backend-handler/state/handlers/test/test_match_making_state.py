@@ -1,5 +1,4 @@
 import unittest
-from unittest.mock import patch
 
 from state import StateMachineValidationException
 from state.handlers import MatchMakingState
@@ -54,9 +53,7 @@ class TestMatchMakingState(unittest.TestCase):
         self.assertFalse(error == None)
 
     # Successful Test
-    @patch('state.handlers.match_making_state.updateGameDetails')
-    @patch('state.handlers.match_making_state.updatePlayers')
-    def test_successful_game_start(self, updateGameDetails, updatePlayers):
+    def test_successful_game_start(self):
         gameDetails = createGameDetails(GameState.MATCH_MAKING)
         payload = dict()
         payload['id'] = 1

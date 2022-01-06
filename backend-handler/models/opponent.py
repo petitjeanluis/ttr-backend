@@ -5,7 +5,6 @@ from constants import PlayerColor
 class Opponent:
 
     def __init__(self, player: Player):
-        self.id: str = player.id
         self.name: str = player.name
         self.color: PlayerColor = player.color
         self.trainCardCount: int = len(player.trainCards)
@@ -15,7 +14,6 @@ class Opponent:
 
     def toDict(self) -> dict:
         return {
-            'id': self.id,
             'name': self.name,
             'color': self.color._name_,
             'trainCardCount': self.trainCardCount,
