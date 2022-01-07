@@ -16,7 +16,8 @@ class StateUpdate:
             player: Player,
             activePlayerId: str,
             gameState: GameState,
-            gameId: int) -> None:
+            gameId: int,
+            hostId: int) -> None:
         self.pathOwnership: dict = pathOwnership
         self.opponents: list[Opponent] = opponents
         self.availableCards: list[TrainColor] = availableCards
@@ -24,6 +25,7 @@ class StateUpdate:
         self.activePlayerId: str = activePlayerId
         self.gameState: GameState = gameState
         self.gameId: int = gameId
+        self.hostId: int = hostId
     
     def toJsonStr(self) -> dict:
         jsonObject = {
@@ -33,7 +35,8 @@ class StateUpdate:
             'player': self.player.toDict(),
             'activePlayerId': self.activePlayerId,
             'gameState': self.gameState._name_,
-            'gameId': self.gameId
+            'gameId': self.gameId,
+            'hostId': self.hostId
         }
         return json.dumps(jsonObject, default=handle_decimal_type)
 
@@ -68,7 +71,8 @@ def buildStateUpdates(gameDetails: GameDetails) -> dict[str, StateUpdate]:
             player=player,
             activePlayerId=gameDetails.activePlayerId,
             gameState=gameDetails.gameState,
-            gameId=gameDetails.gameId
+            gameId=gameDetails.gameId,
+            hostId=gameDetails.hostId
         )
         stateUpdates[player.connectionId] = stateUpdate
 

@@ -46,7 +46,7 @@ class MatchMakingState(StateHandler):
         '''
 
         trainCards: list[TrainColor] = getAllTrainCards()
-        destinationTrainCards: list[list] = getAllDestinationCards()
+        destinationTrainCards: list[int] = getAllDestinationCards()
         playerColors: list[PlayerColor] = getAllPlayerColors()
 
         for player in gameDetails.players:
