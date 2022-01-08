@@ -29,7 +29,7 @@ class StateUpdate:
     
     def toJsonStr(self) -> dict:
         jsonObject = {
-            'pathOwnership': [self.pathOwnership],
+            'pathOwnership': self.pathOwnership,
             'opponents': [opponent.toDict() for opponent in self.opponents],
             'availableCards': [card._name_ for card in self.availableCards],
             'player': self.player.toDict(),
