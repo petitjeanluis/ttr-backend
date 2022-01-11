@@ -14,7 +14,7 @@ class StateUpdate:
             opponents: list[Opponent],
             availableCards: list[TrainColor],
             player: Player,
-            activePlayerId: str,
+            activePlayerId: int,
             gameState: GameState,
             gameId: int,
             hostId: int) -> None:
@@ -22,7 +22,7 @@ class StateUpdate:
         self.opponents: list[Opponent] = opponents
         self.availableCards: list[TrainColor] = availableCards
         self.player: Player = player
-        self.activePlayerId: str = activePlayerId
+        self.activePlayerId: int = activePlayerId
         self.gameState: GameState = gameState
         self.gameId: int = gameId
         self.hostId: int = hostId
